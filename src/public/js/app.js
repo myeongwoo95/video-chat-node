@@ -1,3 +1,6 @@
+const messageList = document.querySelector("ul");
+const messageForm = document.querySelector("form");
+
 const ws = new WebSocket(`ws://${window.location.host}`);
 
 // 소켓이 연결되었을 때
@@ -16,6 +19,13 @@ ws.addEventListener("message", (message) => {
 });
 
 // 데이터 발신
-setTimeout(() => {
-  ws.send("Message (hello world) from clicent");
-}, 2000);
+// setTimeout(() => {
+//   ws.send("Message (hello world) from clicent");
+// }, 2000);
+
+messageForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const input = messageForm.querySelector("input");
+  ws.send(input.value);
+  input.value = "";
+});
