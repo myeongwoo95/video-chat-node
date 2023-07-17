@@ -31,11 +31,13 @@ wss.on("connection", (ws, request) => {
 
   // 브라우저에게서 수신
   ws.on("message", (message) => {
-    console.log(message);
+    console.log(message.toString());
   });
 
   // 브라우저에게 발신
   ws.send("Message (hello world) from server");
+
+  // 브로드캐스트
 });
 
 server.listen(port, () => {
