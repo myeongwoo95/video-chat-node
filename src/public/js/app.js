@@ -1,7 +1,12 @@
 const messageList = document.querySelector("ul");
-const messageForm = document.querySelector("form");
-
+const messageForm = document.querySelector("#message");
+const nickForm = document.querySelector("#nick");
 const ws = new WebSocket(`ws://${window.location.host}`);
+
+function makeMessage(type, payload) {
+  const msg = { type, payload };
+  return JSON.stringify(msg);
+}
 
 // 소켓이 연결되었을 때
 ws.addEventListener("open", () => {
@@ -15,17 +20,27 @@ ws.addEventListener("close", () => {
 
 // 서버로부터 데이터 수신
 ws.addEventListener("message", (message) => {
-  console.log(message.data);
+  const li = document.createElement("li");
+  li.innerText = message.data;
+  messageList.append(li);
 });
 
 // 데이터 발신
-// setTimeout(() => {
-//   ws.send("Message (hello world) from clicent");
-// }, 2000);
-
 messageForm.addEventListener("submit", (event) => {
   event.preventDefault();
   const input = messageForm.querySelector("input");
-  ws.send(input.value);
+  ws.send(makeMessage("new_message", input.value));
+
+  const li = document.createElement("li");
+  li.innerText = `You: ${input.value}`;
+  messageList.append(li);
+
   input.value = "";
+});
+
+nickForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const input = nickForm.querySelector("input");
+  ws.send(makeMessage("nickname", input.value));
+  alert(`닉네임이 ${input.value}로 변경되었습니다.`);
 });

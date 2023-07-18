@@ -54,3 +54,19 @@
   즉 두 개의 프로토콜을 다 같은 port에서 공유하고잇다.
 - app.listen이랑 server.listen의 차이를 잘 모르겠음
 - url은 상수로 박지말고 const ws = new WebSocket(`ws://${window.location.host}`); 이런식으로
+- 데이터 통신은 무저건 String인데 JSON(String)으로 주고받는게 편하다.
+- 클라이언트에서 서버로 데이터를 보낼때는 JS Object를 JSON.stringify 함수를 사용해서 String으로 변환해서 보내고
+- 서버에서는 받은 데이터를 JSON.parse를 사용해서 다시 JS Object로 변환하여 사용한다.
+- 서버로부터 받을때는 JSON.parse 함수를 이용해서 JSON(String)을 자바스크립트 객체(오브젝트)로 변환해서 사용한다.
+- ★★★소켓을 구분하는법: 소켓은 기본적으로 객체다. 소켓에 값을 추가해줌으로써 소켓 구분할 수 있다.
+<pre>
+
+```javascript
+wss.on("connection", (ws, request) => {
+  // 소켓 연결됬을때
+  console.log("some soket is Connected to Server");
+  ws["nickname"] = "Anonymous";
+});
+```
+
+</pre>

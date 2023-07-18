@@ -21,13 +21,10 @@ app.get("/*", (req, res) => {
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
 
-// DB
-const sokets = [];
-
 wss.on("connection", (ws, request) => {
   // 소켓 연결됬을때
   console.log("some soket is Connected to Server");
-  sokets.push(ws);
+  ws["nickname"] = "Anonymous";
 
   // 소켓이 끊겼을때
   ws.on("close", () => {
@@ -35,31 +32,24 @@ wss.on("connection", (ws, request) => {
   });
 
   // 1개의 브라우저에게서 수신
-  ws.on("message", (message) => {
-    wss.clients.forEach((soket) => {
-      soket.send(message.toString());
-    });
+  ws.on("message", (msg) => {
+    const message = JSON.parse(msg);
 
-    // sokets.forEach((soket) => {
-    //   soket.send(message.toString());
-    // });
+    switch (message.type) {
+      case "new_message":
+        wss.clients.forEach((soket) => {
+          soket.send(`${ws.nickname}: ${message.payload}`);
+        });
+        break;
+
+      case "nickname":
+        ws["nickname"] = message.payload;
+        break;
+    }
   });
 
   // 1개의 브라우저에게 발신
   ws.send("Message (hello world) from server");
-
-  // 브로드캐스트
-  /** 1. 첫번째 방법
-  wss.clients.forEach(client => {
-    client.send(`새로운 유저가 접속했습니다. 현재 유저 ${wss.clients.size} 명`)
-  })
-   */
-
-  /** 2. 두번째 방법
-  sokets.forEach((soket) => {
-    ws.send(message.toString())
-  });
-  */
 });
 
 server.listen(port, () => {
