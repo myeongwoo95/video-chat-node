@@ -70,3 +70,10 @@ wss.on("connection", (ws, request) => {
 ```
 
 </pre>
+
+# 4. soket.io
+
+- npm i socket.io
+- soket.io는 websocket을 사용하지만, websocket을 지원하지 않으면 다른 것을 사용한다. (http long polling)
+- 연결이 끊어졌을때 자동으로 재연결하는 기능을 가지고잇다.
+- 방화벽이나 프록시가 있어도 동작한다.
