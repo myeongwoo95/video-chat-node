@@ -60,20 +60,9 @@
 - 서버로부터 받을때는 JSON.parse 함수를 이용해서 JSON(String)을 자바스크립트 객체(오브젝트)로 변환해서 사용한다.
 - ★★★소켓을 구분하는법: 소켓은 기본적으로 객체다. 소켓에 값을 추가해줌으로써 소켓 구분할 수 있다.
 <pre>
-
-```javascript
 wss.on("connection", (ws, request) => {
   // 소켓 연결됬을때
   console.log("some soket is Connected to Server");
   ws["nickname"] = "Anonymous";
 });
-```
-
 </pre>
-
-# 4. soket.io
-
-- npm i socket.io
-- soket.io는 websocket을 사용하지만, websocket을 지원하지 않으면 다른 것을 사용한다. (http long polling)
-- 연결이 끊어졌을때 자동으로 재연결하는 기능을 가지고잇다.
-- 방화벽이나 프록시가 있어도 동작한다.
